@@ -6,7 +6,7 @@ A simple git extension to search for TODOs inside source code.
 
 ## Requirements
 
-- awk or grep (awk is recommended).
+- ack or grep (ack is recommended).
 - python (2.x)
 
 
@@ -36,7 +36,7 @@ source_b.c
 48:// TODO(otheruser): rework user flow page, this is temporary.
 
 # Find todos by a specific users (in the form of TODO(user)).
-$ git todo --user=otheruser       # or git todo -u=otheruser
+$ git todo --user=otheruser       # or git todo -uotheruser
 source_a.c
 10:// TODO(otheruser): change all instances of class A to class B
 
@@ -44,7 +44,7 @@ source_b.c
 48:// TODO(otheruser): rework user flow page, this is temporary.
 
 # Find todos by multiple users
-$ git todo --user=otheruser,johnliu       # or git todo -u=otheruser,johnliu
+$ git todo --user=otheruser,johnliu       # or git todo -uotheruser,johnliu
 source_a.c
 5:// TODO(johnliu): refactor into two classes
 10:// TODO(otheruser): change all instances of class A to class B
@@ -57,8 +57,8 @@ $ git todo --none       # or git todo -n
 source_a.c
 23:// TODO: refactor to common functions file
 
-# Search starting from here.
-$ git todo --user=otheruser --here      # or git todo -h u=otheruser
+# Search starting from the current directory.
+$ git todo --user=otheruser --dir      # or git todo -d -uotheruser
 source_b.c
 48:// TODO(otheruser): rework user flow page, this is temporary.
 ```

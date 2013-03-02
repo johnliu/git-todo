@@ -1,0 +1,109 @@
+#!/usr/bin/python
+
+"""
+A simple git extension to check for todos.
+"""
+
+import argparse
+import os
+import subprocess
+
+from subprocess import CalledProcessError, PIPE
+
+# Core
+ack = False
+
+
+def process_exists(process):
+  """
+  Check if a process exists or not.
+  """
+  command = ['type', process]
+  return subprocess.call(command, stdout=PIPE, stderr=PIPE) == 0
+
+
+def process_output(command):
+  """
+  Gets the output of a command.
+  """
+  output = None
+
+  try:
+    output = subprocess.check_output(command.split())
+  except CalledProcessError:
+    pass
+
+  return output
+
+
+def search(user, directory, with_all=False):
+  """
+  Search for the given user.
+  """
+  start_str = '' if with_all or not user else '\\(' if ack else '('
+  end_str = '' if with_all or not user else '\\)' if ack else ')'
+  colon_str = '' if with_all else ':'
+  user_str = '' if not user else user
+  search_form = 'TODO%s%s%s%s' % (start_str, user_str, end_str, colon_str)
+
+  if ack:
+    command = 'ack "%s" %s' % (search_form, directory)
+  else:
+    command = 'grep -rn --color "%s" %s' % (search_form, directory)
+  os.system(command)
+
+
+def main():
+  # Check for git.
+  if not process_exists('git'):
+    argparse.ArgumentParser.error('git is required.')
+
+  # Get the git root directory.
+  git_root = process_output('git rev-parse --show-toplevel')
+  if git_root is None:
+    argparse.ArgumentParser.error('not a git repository.')
+
+  # Check for ack
+  global ack
+  ack = process_exists('ack')
+
+  # Get the user options via gitconfig.
+  default = process_output('git config todo.default')
+  users = process_output('git config todo.user')
+
+  # Add arguments.
+  parser = argparse.ArgumentParser()
+  group = parser.add_mutually_exclusive_group()
+  group.add_argument('-a', '--all',
+                     action='store_true',
+                     help='prints out todos for all users, including no user todos')
+  group.add_argument('-u', '--user',
+                     default=users,
+                     action='store',
+                     help='prints out todos for the specified users (comma separated)')
+  group.add_argument('-n', '--none',
+                     action='store_true',
+                     help='prints out todos that do not have a user assigned')
+  parser.add_argument('-d', '--dir',
+                      action='store_true',
+                      help='prints out todos recursively starting from the current directory')
+  args = parser.parse_args()
+
+  # Parse the users list.
+  users = sorted(map(lambda s: s.strip(), users.split(',')))
+
+  # Print todos based on arguments.
+  directory = os.path.abspath(git_root)
+  if args.dir:
+    directory = os.getcwd()
+  if args.all or default == 'all':
+    search(None, directory, True)
+  elif args.none or default == 'none':
+    search(None, directory, False)
+  else:
+    for user in users:
+      search(user, directory, False)
+
+
+if __name__ == '__main__':
+  main()
