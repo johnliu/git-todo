@@ -54,14 +54,17 @@ def search(user, directory, with_all=False):
 
 
 def main():
+  # Create a parser.
+  parser = argparse.ArgumentParser()
+
   # Check for git.
   if not process_exists('git'):
-    argparse.ArgumentParser.error('git is required.')
+    parser.error('git is required.')
 
   # Get the git root directory.
   git_root = process_output('git rev-parse --show-toplevel')
   if git_root is None:
-    argparse.ArgumentParser.error('not a git repository.')
+    parser.error('not a git repository.')
 
   # Check for ack
   global ack
@@ -72,7 +75,6 @@ def main():
   users = process_output('git config todo.user')
 
   # Add arguments.
-  parser = argparse.ArgumentParser()
   group = parser.add_mutually_exclusive_group()
   group.add_argument('-a', '--all',
                      action='store_true',
