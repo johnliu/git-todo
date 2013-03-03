@@ -20,6 +20,11 @@ path.
 brew install https://raw.github.com/johnliu/git-todo/master/git-todo.rb
 ```
 
+or clone the repository and:
+```
+brew install ./git-todo.rb
+```
+
 
 ## Usage
 
