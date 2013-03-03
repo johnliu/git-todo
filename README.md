@@ -15,6 +15,11 @@ A simple git extension to search for TODOs inside source code.
 In general, download `git-todo` and `git-todos` and move the script to some place within your
 path.
 
+### Using Homebrew:
+```
+brew install https://raw.github.com/johnliu/git-todo/master/git-todo.rb
+```
+
 
 ## Usage
 
