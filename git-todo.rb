@@ -9,10 +9,6 @@ class GitTodo < Formula
 
   depends_on 'ack' => :recommended
 
-  def patches
-    DATA
-  end
-
   def install
     bin.install 'git-todo'
     bin.install 'git-todos'
