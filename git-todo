@@ -29,7 +29,7 @@ def process_output(command):
   output = None
 
   try:
-    output = subprocess.check_output(command.split())
+    output = subprocess.check_output(command.split(), stdout=PIPE, stderr=PIPE)
   except CalledProcessError:
     pass
 
