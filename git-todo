@@ -29,7 +29,7 @@ def process_output(command):
   output = None
 
   try:
-    output = subprocess.check_output(command.split(), stdout=PIPE, stderr=PIPE)
+    output = subprocess.check_output(command.split())
   except CalledProcessError:
     pass
 
@@ -92,7 +92,7 @@ def main():
   args = parser.parse_args()
 
   # Parse the users list.
-  users = sorted(map(lambda s: s.strip(), users.split(',')))
+  users = sorted(map(lambda s: s.strip(), args.user.split(',')))
 
   # Print todos based on arguments.
   directory = os.path.abspath(git_root)
