@@ -2,8 +2,8 @@ require 'formula'
 
 class GitTodo < Formula
   homepage 'http://github.com/johnliu/git-todo'
-  url 'http://github.com/johnliu/git-todo.git', :tag => '0.1.1'
-  version '0.1.1'
+  url 'http://github.com/johnliu/git-todo.git', :tag => '0.1.2'
+  version '0.1.2'
 
   head 'http://github.com/johnliu/git-todo.git'
 
